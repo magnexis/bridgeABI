@@ -1,0 +1,8 @@
+add_library(bridgeabi_greeter_plugin SHARED greeter_plugin.cpp)
+target_link_libraries(bridgeabi_greeter_plugin PRIVATE BridgeABI::bridgeabi)
+target_include_directories(bridgeabi_greeter_plugin PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_compile_definitions(bridgeabi_greeter_plugin PRIVATE BRIDGEABI_BUILDING_LIBRARY=1)
+set_target_properties(bridgeabi_greeter_plugin PROPERTIES PREFIX "" OUTPUT_NAME "bridgeabi-greeter")
+
+add_executable(bridgeabi_greeter_host greeter_host.cpp)
+target_link_libraries(bridgeabi_greeter_host PRIVATE BridgeABI::bridgeabi)

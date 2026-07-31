@@ -1,0 +1,6 @@
+namespace bridgeabi.examples;
+
+@id("org.bridgeabi.examples.greeter")
+interface Greeter version 1.0 {
+  owned string greet(borrowed string name);
+}

@@ -1,0 +1,22 @@
+# CMake and native build output
+/build/
+/artifacts/
+/$install/
+CMakeUserPresets.json
+
+# NuGet and .NET output
+**/bin/
+**/obj/
+*.nupkg
+*.snupkg
+
+# IDE and operating-system files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+Thumbs.db
+.DS_Store

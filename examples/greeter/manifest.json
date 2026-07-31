@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "org.bridgeabi.examples.greeter",
+  "name": "BridgeABI Greeter",
+  "version": "1.0.0",
+  "bridgeAbiVersion": "1.0",
+  "entryPoint": "bridge_plugin_entry",
+  "interfaces": [{ "id": "org.bridgeabi.examples.greeter", "version": "1.0" }],
+  "capabilities": []
+}

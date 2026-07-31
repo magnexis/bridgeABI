@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <BridgeAbiNativeRoot>$(MSBuildThisFileDirectory)native\</BridgeAbiNativeRoot>
+    <BridgeAbiNativeInclude>$(BridgeAbiNativeRoot)include\</BridgeAbiNativeInclude>
+  </PropertyGroup>
+</Project>

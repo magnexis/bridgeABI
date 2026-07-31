@@ -1,0 +1,4 @@
+@PACKAGE_INIT@
+include("${CMAKE_CURRENT_LIST_DIR}/BridgeABITargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/BridgeABIGenerate.cmake")
+check_required_components(BridgeABI)

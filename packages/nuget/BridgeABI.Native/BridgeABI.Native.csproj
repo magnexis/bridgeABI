@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>BridgeABI.Native</PackageId>
+    <Version>0.1.0-preview.2</Version>
+    <Authors>Magnexis</Authors>
+    <Company>Magnexis</Company>
+    <Description>Native C++ headers, Windows x64 library, and CMake integration for BridgeABI.</Description>
+    <PackageTags>cpp;native;abi;plugin;cmake;bridgeabi</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>false</IncludeSymbols>
+    <NoBuild>true</NoBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="build\BridgeABI.Native.props" Pack="true" PackagePath="buildTransitive\BridgeABI.Native.props" />
+    <None Include="build\BridgeABI.Native.targets" Pack="true" PackagePath="buildTransitive\BridgeABI.Native.targets" />
+    <None Include="..\..\..\include\bridgeabi\**\*" Pack="true" PackagePath="buildTransitive\native\include\bridgeabi" />
+    <None Include="..\..\..\cmake\BridgeABIGenerate.cmake" Pack="true" PackagePath="buildTransitive\native\cmake" />
+    <None Include="$(BridgeAbiNativeLibrary)" Pack="true" PackagePath="runtimes\win-x64\native" Condition="'$(BridgeAbiNativeLibrary)' != '' and Exists('$(BridgeAbiNativeLibrary)')" />
+    <None Include="$(BridgeAbiInstallRoot)\lib\bridgeabi.lib" Pack="true" PackagePath="buildTransitive\native\lib" Condition="'$(BridgeAbiInstallRoot)' != '' and Exists('$(BridgeAbiInstallRoot)\lib\bridgeabi.lib')" />
+    <None Include="$(BridgeAbiInstallRoot)\lib\cmake\BridgeABI\*.cmake" Pack="true" PackagePath="buildTransitive\native\lib\cmake\BridgeABI" Condition="'$(BridgeAbiInstallRoot)' != '' and Exists('$(BridgeAbiInstallRoot)\lib\cmake\BridgeABI')" />
+  </ItemGroup>
+</Project>

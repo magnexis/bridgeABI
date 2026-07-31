@@ -1,0 +1,10 @@
+<Project>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(BridgeAbiNativeInclude);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(PlatformTarget)' == 'x64' Or '$(Platform)' == 'x64'">
+    <Link Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\bridgeabi.lib" />
+  </ItemGroup>
+</Project>
