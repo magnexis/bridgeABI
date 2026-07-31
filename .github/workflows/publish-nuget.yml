@@ -1,6 +1,8 @@
 name: Publish NuGet package
 
 on:
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -12,10 +14,6 @@ on:
         required: true
         default: false
         type: boolean
-  push:
-    tags:
-      - "v*"
-
 permissions:
   contents: read
 
@@ -24,7 +22,7 @@ jobs:
     name: Build, test, and package (Windows x64)
     runs-on: windows-2022
     env:
-      PACKAGE_VERSION: ${{ inputs.version || github.ref_name }}
+      PACKAGE_VERSION: ${{ inputs.version }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -34,10 +32,16 @@ jobs:
         with:
           dotnet-version: "9.0.x"
 
-      - name: Derive release version from tag
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Derive package version from published release
+        if: github.event_name == 'release'
         shell: pwsh
-        run: '"PACKAGE_VERSION=$($env:GITHUB_REF_NAME.TrimStart(''v''))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if ($env:RELEASE_TAG -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+') {
+            throw "Release tag '$env:RELEASE_TAG' must begin with a NuGet-compatible v<major>.<minor>.<patch> version."
+          }
+          "PACKAGE_VERSION=$($env:RELEASE_TAG.Substring(1))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - name: Build and test BridgeABI
         shell: pwsh
@@ -58,7 +62,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish to NuGet.org
-        if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish)
+        if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.publish)
         shell: pwsh
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
