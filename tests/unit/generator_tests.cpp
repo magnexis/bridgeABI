@@ -2,10 +2,11 @@
 #include "compatibility/snapshot.hpp"
 #include "parser/idl_parser.hpp"
 #include "semantics/validate.hpp"
-#include <cassert>
+#include <iostream>
 #include <string>
 
 int main() {
+  const auto require = [](bool condition, const char* message) { if (!condition) std::cerr << message << '\n'; return condition; };
   constexpr std::string_view source = R"(namespace examples.audio;
 @id("org.example.audio")
 interface AudioPlugin version 1.2 {
@@ -13,15 +14,15 @@ interface AudioPlugin version 1.2 {
   owned string name();
 })";
   bridgeabi::generator::interface_definition definition; std::string error;
-  assert(bridgeabi::generator::parse_idl(source, definition, error));
-  assert(bridgeabi::generator::validate(definition, error));
-  assert(definition.name == "AudioPlugin" && definition.major == 1 && definition.methods.size() == 2);
+  if (!require(bridgeabi::generator::parse_idl(source, definition, error), "Expected valid IDL to parse")) return 1;
+  if (!require(bridgeabi::generator::validate(definition, error), "Expected valid IDL to validate")) return 1;
+  if (!require(definition.name == "AudioPlugin" && definition.major == 1 && definition.methods.size() == 2, "Unexpected normalized interface")) return 1;
   const auto files = bridgeabi::generator::emit_artifacts(definition);
-  assert(files.size() == 6 && files.contains("c/audioplugin_abi.h"));
-  assert(files.at("c/audioplugin_abi.h").find("bridge_owned_buffer") != std::string::npos);
+  if (!require(files.size() == 6 && files.contains("c/audioplugin_abi.h"), "Expected generated artifacts")) return 1;
+  if (!require(files.at("c/audioplugin_abi.h").find("bridge_owned_buffer") != std::string::npos, "Expected owned result buffer")) return 1;
   const auto same = bridgeabi::generator::compare_snapshot(definition, files.at("compatibility/audioplugin.compat.json"));
-  assert(same.compatible);
+  if (!require(same.compatible, "Expected unchanged snapshot compatibility")) return 1;
   definition.methods[0].name = "changed";
-  assert(!bridgeabi::generator::compare_snapshot(definition, files.at("compatibility/audioplugin.compat.json")).compatible);
-  assert(!bridgeabi::generator::parse_idl("interface invalid", definition, error));
+  if (!require(!bridgeabi::generator::compare_snapshot(definition, files.at("compatibility/audioplugin.compat.json")).compatible, "Expected changed interface incompatibility")) return 1;
+  if (!require(!bridgeabi::generator::parse_idl("interface invalid", definition, error), "Expected invalid IDL rejection")) return 1;
 }
