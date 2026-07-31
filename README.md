@@ -4,6 +4,8 @@
 
 > Stable native interfaces without trusting the C++ ABI.
 
+[![NuGet](https://img.shields.io/nuget/vpre/BridgeABI.Native?label=NuGet)](https://www.nuget.org/packages/BridgeABI.Native/0.1.0-preview.2) [Documentation](https://magnexis.github.io/bridgeABI/)
+
 BridgeABI is an open-source C++ foundation for loading independently compiled native plugins through a deliberately small C-compatible ABI boundary. It does not pass STL types, exceptions, or allocator ownership across module boundaries.
 
 ## Status
@@ -35,6 +37,8 @@ In-process plugins are **not sandboxed**: loading one grants it the host process
 See [Architecture](docs/ARCHITECTURE.md) and [roadmap](docs/ROADMAP.md).
 
 ## NuGet prerelease package
+
+The official Windows x64 prerelease package is [BridgeABI.Native 0.1.0-preview.2 on NuGet.org](https://www.nuget.org/packages/BridgeABI.Native/0.1.0-preview.2).
 
 Build a local Windows x64 `BridgeABI.Native` prerelease package with:
 
